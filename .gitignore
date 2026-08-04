@@ -1,0 +1,23 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local persistent data
+data/
+**/data/
+
+# Backup files
+backups/
+*.backup
+*.tar
+*.tar.gz
+
+# Editor and operating system
+.vscode/
+.idea/
+.DS_Store
+
+# Temporary files
+*.log
+*.tmp
