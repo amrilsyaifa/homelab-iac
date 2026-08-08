@@ -8,6 +8,5 @@ echo
 docker ps \
   --filter "name=portainer" \
   --filter "name=minio" \
-  --filter "name=gitea" \
   --filter "name=registry" \
   --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"

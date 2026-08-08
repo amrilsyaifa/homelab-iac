@@ -6,7 +6,6 @@ BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 services=(
   "registry"
-  "gitea"
   "minio"
   "portainer"
 )
