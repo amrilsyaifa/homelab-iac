@@ -8,8 +8,8 @@ spec:
   ingressClassName: traefik
 
   rules:
-  - host: nginx.home.local
-  
+  - host: nginx.home.arpa
+
     http:
       paths:
         - path: /
