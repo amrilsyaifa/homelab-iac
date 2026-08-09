@@ -5,10 +5,11 @@ metadata:
   namespace: dev
 
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
 
   rules:
   - host: nginx.home.local
+  
     http:
       paths:
         - path: /
