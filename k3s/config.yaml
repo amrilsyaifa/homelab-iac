@@ -1,0 +1,6 @@
+write-kubeconfig-mode: "0644"
+
+# example code in the future for k3s config.yaml
+# node-name: home-asy
+# disable:
+#   - servicelb

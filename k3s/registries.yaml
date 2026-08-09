@@ -1,0 +1,4 @@
+mirrors:
+  "registry.home.arpa:5000":
+    endpoint:
+      - "http://registry.home.arpa:5000"
