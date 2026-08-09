@@ -1,0 +1,5 @@
+{
+  "insecure-registries": [
+    "registry.home.arpa:5000"
+  ]
+}
