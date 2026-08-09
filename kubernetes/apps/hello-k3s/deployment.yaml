@@ -5,28 +5,29 @@ metadata:
   name: hello-k3s
   namespace: dev
 
-  spec:
-    replicas: 1
+spec:
+  replicas: 1
 
-    selector:
-      matchLabels:
+  selector:
+    matchLabels:
+      app: hello-k3s
+
+  template:
+    metadata:
+      labels:
         app: hello-k3s
 
-    template:
-      metadata:
-        labels:
-          app: hello-k3s
-
-      spec:
-        containers:
+    spec:
+      containers:
         - name: hello-k3s
+
           image: registry.home.arpa:5000/hello-k3s:v1
 
           imagePullPolicy: Always
 
           ports:
-          - containerPort: 3000
+            - containerPort: 3000
 
           env:
-          - name: PORT
-            value: "3000"
+            - name: PORT
+              value: "3000"
