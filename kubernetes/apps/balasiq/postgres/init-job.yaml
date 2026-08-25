@@ -1,0 +1,86 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: balasiq-postgres-init
+  namespace: balasiq
+
+spec:
+  backoffLimit: 3
+
+  template:
+    metadata:
+      labels:
+        app: balasiq-postgres-init
+
+    spec:
+      restartPolicy: Never
+
+      containers:
+        - name: postgres-init
+          image: pgvector/pgvector:pg17
+
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: balasiq-postgres-secret
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: balasiq-postgres-secret
+                  key: POSTGRES_USER
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: balasiq-postgres-secret
+                  key: POSTGRES_PASSWORD
+
+            - name: BALASIQ_APP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: balasiq-postgres-secret
+                  key: BALASIQ_APP_USER
+
+            - name: BALASIQ_APP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: balasiq-postgres-secret
+                  key: BALASIQ_APP_PASSWORD
+
+          command:
+            - sh
+            - -c
+            - |
+              export PGPASSWORD="$POSTGRES_PASSWORD"
+
+              until pg_isready \
+                -h postgres \
+                -U "$POSTGRES_USER" \
+                -d "$POSTGRES_DB"
+              do
+                echo "Waiting for PostgreSQL..."
+                sleep 2
+              done
+
+              psql \
+                -h postgres \
+                -U "$POSTGRES_USER" \
+                -d "$POSTGRES_DB" \
+                -v app_user="$BALASIQ_APP_USER" \
+                -v app_password="$BALASIQ_APP_PASSWORD" \
+                -v db_name="$POSTGRES_DB" \
+                -f /scripts/init-role.sql
+
+          volumeMounts:
+            - name: postgres-init
+              mountPath: /scripts
+              readOnly: true
+
+      volumes:
+        - name: postgres-init
+          configMap:
+            name: balasiq-postgres-init

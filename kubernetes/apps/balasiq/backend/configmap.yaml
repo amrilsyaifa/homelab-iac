@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 
 metadata:
-  name: balasiq-backend
+  name: balasiq-backend-config
   namespace: balasiq
 
 data:

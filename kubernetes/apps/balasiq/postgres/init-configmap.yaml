@@ -6,20 +6,29 @@ metadata:
   namespace: balasiq
 
 data:
-  000_roles.sql: |
-    DO $$
-    BEGIN
-      IF NOT EXISTS (
-        SELECT FROM pg_catalog.pg_roles
-        WHERE rolname = 'balasiq_app'
-      ) THEN
-        CREATE ROLE balasiq_app
-          LOGIN
-          PASSWORD 'Am12il1991!'
-          NOSUPERUSER
-          NOCREATEDB
-          NOCREATEROLE
-          NOBYPASSRLS;
-      END IF;
-    END
-    $$;
+  init-role.sql: |
+    SELECT format(
+      'CREATE ROLE %I LOGIN PASSWORD %L NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS',
+      :'app_user',
+      :'app_password'
+    )
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM pg_catalog.pg_roles
+      WHERE rolname = :'app_user'
+    )
+    \gexec
+
+    SELECT format(
+      'ALTER ROLE %I PASSWORD %L',
+      :'app_user',
+      :'app_password'
+    )
+    \gexec
+
+    SELECT format(
+      'GRANT CONNECT ON DATABASE %I TO %I',
+      :'db_name',
+      :'app_user'
+    )
+    \gexec

@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: balasiq-migrate
+  namespace: balasiq
+
+spec:
+  backoffLimit: 3
+
+  template:
+    metadata:
+      labels:
+        app: balasiq-migrate
+
+    spec:
+      restartPolicy: Never
+
+      containers:
+        - name: migrate
+
+          image: registry.home.arpa:5000/balasiq/backend:0.1.1
+
+          command:
+            - node
+            - backend/dist/src/infrastructure/database/migrate.js
+
+          envFrom:
+            - configMapRef:
+                name: balasiq-backend-config
+
+            - secretRef:
+                name: balasiq-backend-secret
