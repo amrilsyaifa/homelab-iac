@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: balasiq-postgres-init
+  namespace: balasiq
+
+data:
+  000_roles.sql: |
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT FROM pg_catalog.pg_roles
+        WHERE rolname = 'balasiq_app'
+      ) THEN
+        CREATE ROLE balasiq_app
+          LOGIN
+          PASSWORD 'Am12il1991!'
+          NOSUPERUSER
+          NOCREATEDB
+          NOCREATEROLE
+          NOBYPASSRLS;
+      END IF;
+    END
+    $$;
