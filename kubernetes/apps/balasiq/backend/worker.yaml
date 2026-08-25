@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: worker
+  namespace: balasiq
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: balasiq-worker
+
+  template:
+    metadata:
+      labels:
+        app: balasiq-worker
+
+    spec:
+      containers:
+        - name: worker
+          image: registry.home.arpa:5000/balasiq/backend:0.1.2
+
+          command:
+            - node
+            - backend/dist/src/workers/spike-worker.js
+
+          envFrom:
+            - configMapRef:
+                name: balasiq-backend-config
+
+            - secretRef:
+                name: balasiq-backend-secret
+
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+
+            limits:
+              cpu: "300m"
+              memory: "384Mi"

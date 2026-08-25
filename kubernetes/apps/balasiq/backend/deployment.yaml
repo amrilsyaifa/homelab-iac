@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: backend
+  namespace: balasiq
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: balasiq-backend
+
+  template:
+    metadata:
+      labels:
+        app: balasiq-backend
+
+    spec:
+      containers:
+        - name: backend
+          image: registry.home.arpa:5000/balasiq/backend:0.1.2
+
+          ports:
+            - name: http
+              containerPort: 4000
+
+          envFrom:
+            - configMapRef:
+                name: balasiq-backend-config
+
+            - secretRef:
+                name: balasiq-backend-secret
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            periodSeconds: 2
+            failureThreshold: 30
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            periodSeconds: 5
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            periodSeconds: 10
+            failureThreshold: 3
+
+          volumeMounts:
+            - name: backend-data
+              mountPath: /workspace/.data
+
+      volumes:
+        - name: backend-data
+          persistentVolumeClaim:
+            claimName: balasiq-backend-data

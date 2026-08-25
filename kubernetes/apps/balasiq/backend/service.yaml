@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: backend
+  namespace: balasiq
+
+spec:
+  selector:
+    app: balasiq-backend
+
+  ports:
+    - name: http
+      port: 4000
+      targetPort: 4000
+
+  type: ClusterIP
