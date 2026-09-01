@@ -1,0 +1,80 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: balasiq
+  namespace: balasiq
+
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: balasiq-redirect-https@kubernetescrd
+
+
+spec:
+  ingressClassName: traefik
+
+  tls:
+    - secretName: balasiq-home-arpa-tls
+      hosts:
+        - home.arpa
+        - app.home.arpa
+        - platform.home.arpa
+        - api.home.arpa
+        - "*.home.arpa"
+
+  rules:
+    - host: home.arpa
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: landing
+                port:
+                  number: 80
+
+    - host: app.home.arpa
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+
+    - host: platform.home.arpa
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+
+    - host: api.home.arpa
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 4000
+
+    - host: "*.home.arpa"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
