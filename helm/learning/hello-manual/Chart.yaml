@@ -1,0 +1,11 @@
+apiVersion: v2
+
+name: hello-manual
+
+description: Manual Helm chart for learning
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.27"
