@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/amrilsyaifa/homelab-iac.git
     targetRevision: main
-    path: kubernetes/apps/balasiq
+    path: environments/staging/balasiq
 
     directory:
       recurse: true

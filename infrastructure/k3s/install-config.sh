@@ -8,7 +8,7 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 K3S_SOURCE="$SCRIPT_DIR/registries.yaml"
 K3S_TARGET="/etc/rancher/k3s/registries.yaml"
 
-DOCKER_SOURCE="$PROJECT_DIR/docker/daemon.json"
+DOCKER_SOURCE="$PROJECT_DIR/infrastructure/docker/daemon.json"
 DOCKER_TARGET="/etc/docker/daemon.json"
 
 echo "======================================"
