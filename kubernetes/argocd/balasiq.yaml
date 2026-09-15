@@ -19,5 +19,8 @@ spec:
     namespace: balasiq
 
   syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=false
